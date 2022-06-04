@@ -1,0 +1,27 @@
+services:
+  backend:
+    build: ./packages/backend
+    command: node dist/index.js
+    env_file: ./packages/backend/.env
+    depends_on:
+      - mongo
+  frontend:
+    build: ./packages/frontend
+    env_file: ./packages/frontend/.env
+    ports:
+      - '5004:80'
+    depends_on:
+      - backend
+  mongo:
+    image: 'mongo'
+    environment:
+      - MONGO_INITDB_DATABASE=broqr
+      - MONGO_INITDB_ROOT_USERNAME=${DB_ROOT_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_ROOT_PASS}
+    command: --quiet
+    ports:
+      - '3002:27017'
+    volumes:
+      - ./mongo_volume:/data/db
+volumes:
+  mongo_volume:

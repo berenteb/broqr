@@ -1,0 +1,15 @@
+{
+  "name": "broqr",
+  "author": {
+    "name": "Bálint Berente",
+    "email": "balint.berente@gmail.com",
+    "url": "berente.net"
+  },
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/backend",
+    "packages/frontend"
+  ]
+}
