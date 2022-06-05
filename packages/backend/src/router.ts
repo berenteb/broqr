@@ -1,12 +1,9 @@
 import { Express } from "express";
-import { User } from "./models/user";
 import apiMW from "./mw/apiMW";
 import { UserController } from "./controllers/userController";
 import passport from "passport";
 import loginMW from "./auth/loginMW";
-import getUserMW from "./mw/getUserMW";
-import { LinkModel } from "./models/link";
-import { QrModel } from "./models/qr";
+import getUserMW from "./mw/user/getUserMW";
 import validateLinkModification from "./utils/validateModification";
 import saveLinkMW from "./mw/link/saveLinkMW";
 import redirectMW from "./mw/redirectMW";
@@ -16,14 +13,15 @@ import deleteLinkMW from "./mw/link/deleteLinkMW";
 import getStatisticsMW from "./mw/link/getStatisticsMW";
 import editApiKey from "./mw/apiKey/editApiKey";
 import fullLinkResponseMW from "./mw/link/fullLinkResponseMW";
+import checkLinkQuotaMW from "./mw/permissions/checkLinkQuotaMW";
+import checkStatisticsAccessMW from "./mw/permissions/checkStatisticsAccessMW";
+import checkTierMW from "./mw/permissions/checkTierMW";
+import { Tiers } from "./utils/tiers";
+import getUsersMW from "./mw/user/getUsersMW";
+import editUserMW from "./mw/user/editUserMW";
 
 const userController = new UserController();
 
-export const ObjRepo = {
-  LinkModel: LinkModel,
-  QrModel: QrModel,
-  User: User,
-};
 export function Router(app: Express) {
   app.get("/api/link", passport.authenticate("jwt"), getLinksMW(), apiMW());
   app.get(
@@ -36,6 +34,7 @@ export function Router(app: Express) {
   app.get(
     "/api/link/statistics/:linkId/:interval",
     passport.authenticate("jwt"),
+    checkStatisticsAccessMW(),
     validateLinkModification(),
     getLinkMW(),
     getStatisticsMW(),
@@ -51,12 +50,14 @@ export function Router(app: Express) {
   app.put(
     "/api/link/",
     passport.authenticate("jwt"),
+    checkLinkQuotaMW(),
     saveLinkMW(true),
     apiMW()
   );
   app.post(
     "/api/createLink/",
     passport.authenticate("headerapikey"),
+    checkLinkQuotaMW(),
     saveLinkMW(true),
     fullLinkResponseMW()
   );
@@ -65,6 +66,30 @@ export function Router(app: Express) {
     passport.authenticate("jwt"),
     validateLinkModification(),
     deleteLinkMW(),
+    apiMW(true)
+  );
+  /**
+   * User
+   */
+  app.get(
+    "/api/users",
+    passport.authenticate("jwt"),
+    checkTierMW(Tiers.ADMIN),
+    getUsersMW(),
+    apiMW()
+  );
+  app.get(
+    "/api/user/:userId",
+    passport.authenticate("jwt"),
+    checkTierMW(Tiers.ADMIN),
+    getUserMW(),
+    apiMW()
+  );
+  app.post(
+    "/api/user/:userId",
+    passport.authenticate("jwt"),
+    checkTierMW(Tiers.ADMIN),
+    editUserMW(),
     apiMW(true)
   );
   /**

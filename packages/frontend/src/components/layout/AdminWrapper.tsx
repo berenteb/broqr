@@ -11,8 +11,9 @@ import { ErrorPage } from "../pages/ErrorPage";
 import { EditLinkPage } from "../pages/EditLinkPage";
 import { Footer } from "../elements/Footer";
 import { LinkPage } from "../pages/LinkPage";
-import { useAuthContext } from "../../utils/useAuthContext";
 import { ProfilePage } from "../pages/ProfilePage";
+import { EditUserPage } from "../pages/EditUserPage";
+import { UsersPage } from "../pages/UsersPage";
 
 export const AdminWrapper: React.FC = () => {
   return (
@@ -54,6 +55,13 @@ export const AdminWrapper: React.FC = () => {
                 element={<EditLinkPage />}
               />
               <Route index element={<LinksPage />} />
+            </Route>
+            <Route path={Paths.USER}>
+              <Route
+                path={Paths.EDIT + "/:userId"}
+                element={<EditUserPage />}
+              />
+              <Route index element={<UsersPage />} />
             </Route>
             <Route path={Paths.PROFILE} element={<ProfilePage />} />
             <Route path={Paths.ERROR} element={<ErrorPage />} />

@@ -2,7 +2,9 @@ import { Flex, Stack, Text } from "@chakra-ui/react";
 import React, { ReactElement } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AbsolutePaths } from "../../../utils/paths";
-import { FaLink, FaTh } from "react-icons/fa";
+import { FaLink, FaTh, FaUser } from "react-icons/fa";
+import { useAuthContext } from "../../../utils/useAuthContext";
+import { Tiers } from "../../../types/tiers";
 
 type NavItem = {
   label: string;
@@ -35,6 +37,7 @@ const MobileNavItem: React.FC<NavItem> = ({ label, href, leftIcon }) => {
 };
 
 export const MobileNav: React.FC = () => {
+  const { user } = useAuthContext();
   return (
     <Stack p={2}>
       <MobileNavItem
@@ -47,6 +50,13 @@ export const MobileNav: React.FC = () => {
         label="Linkek"
         href={AbsolutePaths.LINK}
       />
+      {user?.tier === Tiers.ADMIN && (
+        <MobileNavItem
+          leftIcon={<FaUser />}
+          label="Felhasználók"
+          href={AbsolutePaths.USER}
+        />
+      )}
     </Stack>
   );
 };

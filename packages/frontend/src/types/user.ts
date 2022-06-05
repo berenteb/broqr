@@ -1,4 +1,8 @@
+import { Tiers } from "./tiers";
+
 export type User = {
-  username: string
-  apiKey: string
-}
+  _id: string;
+  username: string;
+  apiKey: string;
+  tier: Tiers;
+};
