@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Flex } from "@chakra-ui/react";
 import { SideBar } from "./SideBar";
 import { TopBar } from "./TopBar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Route, Routes } from "react-router";
-import { Paths } from "../../utils/paths";
+import { AbsolutePaths, Paths } from "../../utils/paths";
 import { LinksPage } from "../pages/LinksPage";
 import { DashboardPage } from "../pages/DashboardPage";
 import { ErrorPage } from "../pages/ErrorPage";
@@ -14,8 +14,17 @@ import { LinkPage } from "../pages/LinkPage";
 import { ProfilePage } from "../pages/ProfilePage";
 import { EditUserPage } from "../pages/EditUserPage";
 import { UsersPage } from "../pages/UsersPage";
+import { useAuthContext } from "../../utils/useAuthContext";
 
 export const AdminWrapper: React.FC = () => {
+  const { user } = useAuthContext();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user) {
+      navigate(AbsolutePaths.LOGIN);
+    }
+  }, []);
+  if (!user) return null;
   return (
     <Flex
       flexDirection="row"
