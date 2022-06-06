@@ -17,13 +17,7 @@ export function MainPage() {
           flexDirection={["column", "row"]}
         >
           <Flex alignItems="center">
-            <Image
-              src="/img/logo.png"
-              h={10}
-              backgroundColor="white"
-              borderRadius={5}
-              p={1}
-            />
+            <Image src="/img/logo.png" h={10} />
             <Heading color="theme.500" ml={3}>
               BroQR
             </Heading>
