@@ -5,6 +5,8 @@ import {
   Button,
   ButtonGroup,
   Flex,
+  FormControl,
+  FormLabel,
   Heading,
   Input,
   Text,
@@ -18,7 +20,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../utils/configurations";
 import { TokenDTO } from "../../types/tokenDto";
 import { useAuthContext } from "../../utils/useAuthContext";
-import { WarningIcon } from "@chakra-ui/icons";
+import { ArrowLeftIcon, WarningIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 
 export function RegisterPage() {
@@ -58,25 +60,28 @@ export function RegisterPage() {
         padding={10}
       >
         <Heading as="h2" color="theme.500" mt={0} mb={0}>
-          BroQR regisztráció
+          Regisztráció
         </Heading>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <VStack>
-            <Input
-              {...register("username", { required: true })}
-              placeholder="Felhasználónév"
-              mt={10}
-            />
-            <Input
-              {...register("password", { required: true })}
-              placeholder="Jelszó"
-              type="password"
-            />
-            <Input
-              {...register("passwordRepeat", { required: true })}
-              placeholder="Jelszó megerősítése"
-              type="password"
-            />
+          <VStack mt={5}>
+            <FormControl>
+              <FormLabel mt={5}>Felhasználónév</FormLabel>
+              <Input {...register("username", { required: true })} />
+            </FormControl>
+            <FormControl>
+              <FormLabel mt={5}>Jelszó</FormLabel>
+              <Input
+                {...register("password", { required: true })}
+                type="password"
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel mt={5}>Jelszó megerősítése</FormLabel>
+              <Input
+                {...register("passwordRepeat", { required: true })}
+                type="password"
+              />
+            </FormControl>
             {errors.passwordRepeat?.message && (
               <Flex color="red.500" alignItems="center" mt={5}>
                 <WarningIcon mr={1} />
@@ -90,20 +95,29 @@ export function RegisterPage() {
               <Text m={0}>{authError}</Text>
             </Flex>
           )}
-          <ButtonGroup justifyContent="space-between" width="100%" mt={5}>
+          <ButtonGroup justifyContent="space-between" width="100%" mt={10}>
             <Button type="submit" colorScheme="theme">
               Regisztráció
             </Button>
             <LinkButton
               url={AbsolutePaths.LOGIN}
               colorScheme="theme"
-              variant="ghost"
+              variant="link"
             >
-              Bejelentkezés
+              Már van fiókom
             </LinkButton>
           </ButtonGroup>
         </form>
       </Box>
+      <LinkButton
+        mt={10}
+        variant="link"
+        colorScheme="theme"
+        url={AbsolutePaths.MAIN}
+        leftIcon={<ArrowLeftIcon />}
+      >
+        Vissza a főoldalra
+      </LinkButton>
     </Page>
   );
 }

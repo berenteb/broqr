@@ -5,6 +5,8 @@ import {
   Button,
   ButtonGroup,
   Flex,
+  FormControl,
+  FormLabel,
   Heading,
   Input,
   Text,
@@ -18,7 +20,7 @@ import axios from "axios";
 import { API_BASE_URL } from "../../utils/configurations";
 import { TokenDTO } from "../../types/tokenDto";
 import { useAuthContext } from "../../utils/useAuthContext";
-import { WarningIcon } from "@chakra-ui/icons";
+import { ArrowLeftIcon, WarningIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { useServiceContext } from "../../utils/useServiceContext";
 
@@ -58,20 +60,22 @@ export function LoginPage() {
         padding={10}
       >
         <Heading as="h2" color="theme.500" mt={0} mb={0}>
-          BroQR bejelentkezés
+          Bejelentkezés
         </Heading>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <VStack>
-            <Input
-              {...register("username", { required: true })}
-              placeholder="Felhasználónév"
-              mt={10}
-            />
-            <Input
-              {...register("password", { required: true })}
-              placeholder="Jelszó"
-              type="password"
-            />
+          <VStack mt={5}>
+            <FormControl>
+              <FormLabel mt={5}>Felhasználónév</FormLabel>
+              <Input {...register("username", { required: true })} />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel mt={5}>Jelszó</FormLabel>
+              <Input
+                {...register("password", { required: true })}
+                type="password"
+              />
+            </FormControl>
           </VStack>
           {authError && (
             <Flex color="red.500" alignItems="center" mt={5}>
@@ -79,20 +83,29 @@ export function LoginPage() {
               <Text m={0}>{authError}</Text>
             </Flex>
           )}
-          <ButtonGroup justifyContent="space-between" width="100%" mt={5}>
+          <ButtonGroup justifyContent="space-between" width="100%" mt={10}>
             <Button type="submit" colorScheme="theme">
               Bejelentkezés
             </Button>
             <LinkButton
               url={AbsolutePaths.REGISTER}
               colorScheme="theme"
-              variant="ghost"
+              variant="link"
             >
-              Regisztráció
+              Még nincs fiókom
             </LinkButton>
           </ButtonGroup>
         </form>
       </Box>
+      <LinkButton
+        mt={10}
+        variant="link"
+        colorScheme="theme"
+        url={AbsolutePaths.MAIN}
+        leftIcon={<ArrowLeftIcon />}
+      >
+        Vissza a főoldalra
+      </LinkButton>
     </Page>
   );
 }
